@@ -17,20 +17,21 @@ function dedupe(zone) {
 	}
 
 	return {
-		name    : zone.name,
-		abbrs   : abbrs,
-		untils  : untils,
-		offsets : offsets
+		name       : zone.name,
+		abbrs      : abbrs,
+		untils     : untils,
+		offsets    : offsets,
+		population : zone.population
 	};
 }
 
 function findVersion (source) {
-	var matches = source.match(/\nVERSION=\s+(\d{4}[a-z])/);
+	var matches = source.match(/\nRelease (\d{4}[a-z]) /);
 
 	if (matches && matches[1]) {
 		return matches[1];
 	}
-	throw new Error("Could not find version from temp/download/latest/Makefile. It should look something like this.\n\nVERSION= 2014e");
+	throw new Error("Could not find version from temp/download/latest/NEWS.");
 }
 
 module.exports = function (grunt) {
@@ -45,7 +46,7 @@ module.exports = function (grunt) {
 			};
 
 		if (version === 'latest') {
-			output.version = findVersion(grunt.file.read('temp/download/latest/Makefile'));
+			output.version = findVersion(grunt.file.read('temp/download/latest/NEWS'));
 		}
 
 		grunt.file.mkdir('data/unpacked');
